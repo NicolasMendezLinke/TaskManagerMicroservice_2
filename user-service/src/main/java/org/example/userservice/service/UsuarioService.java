@@ -1,7 +1,9 @@
 package org.example.userservice.service;
 
+import org.example.userservice.event.UsuarioCriadoEvent;
 import org.example.userservice.model.HistoricoUsuario;
 import org.example.userservice.model.Usuario;
+import org.example.userservice.producer.UsuarioProducer;
 import org.example.userservice.repository.HistoricoUsuarioRepository;
 import org.example.userservice.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,16 @@ public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final HistoricoUsuarioRepository historicoRepository;
+    private final UsuarioProducer producer;
 
     public UsuarioService(
             UsuarioRepository repository,
-            HistoricoUsuarioRepository historicoRepository) {
+            HistoricoUsuarioRepository historicoRepository,
+            UsuarioProducer producer) {
 
         this.repository = repository;
         this.historicoRepository = historicoRepository;
+        this.producer = producer;
     }
 
     public List<Usuario> listarTodos() {
@@ -35,6 +40,13 @@ public class UsuarioService {
     public Usuario salvar(Usuario usuario) {
 
         Usuario salvo = repository.save(usuario);
+
+        producer.enviarUsuarioCriado(
+                new UsuarioCriadoEvent(
+                        salvo.getId(),
+                        salvo.getNome()
+                )
+        );
 
         HistoricoUsuario historico =
                 new HistoricoUsuario(
