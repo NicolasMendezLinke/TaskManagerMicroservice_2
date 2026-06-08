@@ -4,6 +4,9 @@ import org.example.taskservice.model.Tarefa;
 import org.example.taskservice.repository.TarefaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.example.taskservice.dto.TarefaDTO;
+import org.example.taskservice.dto.UsuarioDTO;
+import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Optional;
@@ -78,5 +81,34 @@ public class TarefaService {
         } catch (Exception e) {
             throw new RuntimeException("Usuário não encontrado");
         }
+    }
+    public List<TarefaDTO> listarTodasComUsuario() {
+
+        return repository.findAll()
+                .stream()
+                .map(tarefa -> {
+
+                    UsuarioDTO usuario =
+                            restTemplate.getForObject(
+                                    "http://localhost:8080/usuarios/" +
+                                            tarefa.getUsuarioId(),
+                                    UsuarioDTO.class
+                            );
+
+                    TarefaDTO dto = new TarefaDTO();
+
+                    dto.setId(tarefa.getId());
+                    dto.setTitulo(tarefa.getTitulo());
+                    dto.setDescricao(tarefa.getDescricao());
+                    dto.setStatus(tarefa.getStatus());
+                    dto.setUsuarioId(tarefa.getUsuarioId());
+
+                    if (usuario != null) {
+                        dto.setNomeUsuario(usuario.getNome());
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

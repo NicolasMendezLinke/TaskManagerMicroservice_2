@@ -16,7 +16,7 @@ function TarefasPage() {
     const carregarTarefas = async () => {
 
         const response = await axios.get(
-            "http://localhost:8081/tarefas"
+            "http://localhost:8090/tarefas"
         );
 
         setTarefas(response.data);
@@ -25,7 +25,7 @@ function TarefasPage() {
     const cadastrarTarefa = async () => {
 
         await axios.post(
-            "http://localhost:8081/tarefas",
+            "http://localhost:8090/tarefas",
             {
                 titulo,
                 descricao,
@@ -93,8 +93,10 @@ function TarefasPage() {
                             {tarefa.titulo}
                             {" | "}
                             {tarefa.status}
-                            {" | Usuário "}
-                            {tarefa.usuarioId}
+                            {" | "}
+                            {tarefa.nomeUsuario
+                                ? tarefa.nomeUsuario
+                                : `Usuário ${tarefa.usuarioId}`}
                         </li>
                     ))}
                 </ul>

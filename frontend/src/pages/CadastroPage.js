@@ -10,7 +10,7 @@ function CadastroPage() {
 
     const carregarUsuarios = async () => {
         const response = await axios.get(
-            "http://localhost:8080/usuarios"
+            "http://localhost:8090/usuarios"
         );
 
         setUsuarios(response.data);
@@ -18,12 +18,30 @@ function CadastroPage() {
 
     const cadastrarUsuario = async () => {
 
-        await axios.post(
-            "http://localhost:8080/usuarios",
-            {
-                nome: nome
+        try {
+
+            const response = await axios.post(
+                "http://localhost:8090/usuarios",
+                {
+                    nome: nome
+                }
+            );
+
+            console.log("SUCESSO:", response);
+
+        } catch (error) {
+
+            console.log("ERRO COMPLETO:", error);
+
+            if (error.response) {
+                console.log("STATUS:", error.response.status);
+                console.log("DADOS:", error.response.data);
             }
-        );
+
+            if (error.request) {
+                console.log("REQUEST:", error.request);
+            }
+        }
 
         setNome("");
 

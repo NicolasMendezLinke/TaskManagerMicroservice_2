@@ -4,12 +4,12 @@ import jakarta.validation.Valid;
 import org.example.taskservice.model.Tarefa;
 import org.example.taskservice.service.TarefaService;
 import org.springframework.web.bind.annotation.*;
+import org.example.taskservice.dto.TarefaDTO;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
-@CrossOrigin(origins = "http://localhost:3000")
 public class TarefaController {
 
     private final TarefaService service;
@@ -19,8 +19,8 @@ public class TarefaController {
     }
 
     @GetMapping
-    public List<Tarefa> listarTodas() {
-        return service.listarTodas();
+    public List<TarefaDTO> listarTodas() {
+        return service.listarTodasComUsuario();
     }
 
     @GetMapping("/{id}")

@@ -13,7 +13,7 @@ function HistoricoPage() {
     const carregarHistorico = async () => {
 
         const response = await axios.get(
-            "http://localhost:8080/historico"
+            "http://localhost:8090/historico"
         );
 
         setHistoricos(response.data);

@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/historico")
-@CrossOrigin(origins = "http://localhost:3000")
 public class HistoricoUsuarioController {
 
     private final HistoricoUsuarioRepository repository;

@@ -13,11 +13,23 @@ function UsuarioPage() {
 
     const carregarUsuarios = async () => {
 
-        const response = await axios.get(
-            "http://localhost:8080/usuarios"
-        );
+        try {
 
-        setUsuarios(response.data);
+            const response = await axios.get(
+                "http://localhost:8090/usuarios"
+            );
+
+            console.log("USUARIOS:");
+            console.log(response.data);
+
+            setUsuarios(response.data);
+
+        } catch (erro) {
+
+            console.log("ERRO USUARIOS:");
+            console.error(erro);
+
+        }
     };
 
     const editarUsuario = async (
@@ -37,7 +49,7 @@ function UsuarioPage() {
         try {
 
             await axios.put(
-                `http://localhost:8080/usuarios/${id}`,
+                `http://localhost:8090/usuarios/${id}`,
                 {
                     nome: novoNome
                 }
@@ -55,6 +67,7 @@ function UsuarioPage() {
         }
     };
 
+
     const excluirUsuario = async (id) => {
 
         const confirmar = window.confirm(
@@ -68,7 +81,7 @@ function UsuarioPage() {
         try {
 
             await axios.delete(
-                `http://localhost:8080/usuarios/${id}`
+                `http://localhost:8090/usuarios/${id}`
             );
 
             carregarUsuarios();
