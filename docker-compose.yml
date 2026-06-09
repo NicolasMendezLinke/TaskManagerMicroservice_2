@@ -1,0 +1,42 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - rabbitmq
+
+  task-service:
+    build: ./task-service
+    container_name: task-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - rabbitmq
+
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "8090:8090"
+    depends_on:
+      - user-service
+      - task-service
+      - eureka-server

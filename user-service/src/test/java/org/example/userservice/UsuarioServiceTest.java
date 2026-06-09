@@ -1,6 +1,7 @@
 package org.example.userservice;
 
 import org.example.userservice.model.Usuario;
+import org.example.userservice.producer.UsuarioProducer;
 import org.example.userservice.repository.HistoricoUsuarioRepository;
 import org.example.userservice.repository.UsuarioRepository;
 import org.example.userservice.service.UsuarioService;
@@ -21,6 +22,9 @@ class UsuarioServiceTest {
 
     @Mock
     private HistoricoUsuarioRepository historicoRepository;
+
+    @Mock
+    private UsuarioProducer producer;
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -45,5 +49,8 @@ class UsuarioServiceTest {
 
         verify(historicoRepository, times(1))
                 .save(any());
+
+        verify(producer, times(1))
+                .enviarUsuarioCriado(any());
     }
 }
