@@ -1,0 +1,32 @@
+name: CI - Task Manager Microservices
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build User Service
+        run: mvn -f user-service/pom.xml clean package -DskipTests
+
+      - name: Build Task Service
+        run: mvn -f task-service/pom.xml clean package -DskipTests
+
+      - name: Build Gateway Service
+        run: mvn -f gateway-service/pom.xml clean package -DskipTests
+
+      - name: Build Eureka Server
+        run: mvn -f eureka-server/pom.xml clean package -DskipTests
